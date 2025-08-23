@@ -1,4 +1,4 @@
-// script.js (Versión Final Definitiva)
+// script.js (Versión Final con Arcanos Menores)
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- DATOS DE LOS ARCANOS ---
@@ -24,10 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
         19: { nombre: "XIX - El Sol", imagen: "Sol.png", texto: "Representa la alegría, el éxito y la vitalidad." },
         20: { nombre: "XX - El Juicio", imagen: "Juicio.png", texto: "Simboliza el renacimiento, la evaluación y la redención." },
         21: { nombre: "XXI - El Mundo", imagen: "Mundo.png", texto: "Representa la realización, la integración y el final de un ciclo." },
-        22: { nombre: "XXII - El Loco", imagen: "Loco.png", texto: "Simboliza el comienzo, la espontaneidad y la fe ciega." }
+        22: { nombre: "XXII - El Loco", imagen: "Loco.png", texto: "Simboliza el comienzo, la espontaneidad y la fe ciega." },
+        
+        // --- NUEVAS CARTAS AÑADIDAS ---
+        23: { nombre: "Rey de Bastos", imagen: "Rey bastos.png", texto: "Simboliza el liderazgo, la visión y la audacia. Un líder natural que inspira a otros." },
+        24: { nombre: "Reina de Bastos", imagen: "Reina bastos.png", texto: "Representa la vitalidad, la independencia y la confianza. Una persona carismática y segura." },
+        25: { nombre: "Caballero de Bastos", imagen: "Caballero bastos.png", texto: "Simboliza la energía, la pasión y la acción impulsiva. Es el momento de perseguir una meta con audacia." },
+        26: { nombre: "Paje de Bastos", imagen: "Paje bastos.png", texto: "Representa el entusiasmo, la exploración y las buenas noticias. El inicio de una nueva y emocionante aventura." },
+        27: { nombre: "Diez de Bastos", imagen: "Diez bastos.png", texto: "Simboliza la carga, la responsabilidad y el trabajo duro. Estás cerca de la meta, pero sientes el peso del esfuerzo." }
     };
 
-    // --- SELECTORES DE ELEMENTOS ---
+    // --- SELECTORES DE ELEMENTOS (Sin cambios) ---
     const pantallas = document.querySelectorAll('.pantalla');
     const btnNuevo = document.getElementById('btn-nuevo');
     const btnVerGuardados = document.getElementById('btn-ver-guardados');
@@ -41,15 +48,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCancelarModal = document.getElementById('btn-cancelar-modal');
     const tablaContainer = document.getElementById('tabla-guardados-container');
     let datosCalculoActual = {};
-    let fechaParaCalculoAnual = ''; // NUEVA VARIABLE para manejar la fecha en el modal
+    let fechaParaCalculoAnual = '';
 
-    // --- FUNCIONES BÁSICAS ---
+    // --- FUNCIONES BÁSICAS (Sin cambios) ---
     function cambiarPantalla(idPantalla) {
         pantallas.forEach(p => p.classList.remove('activa'));
         const pantallaActiva = document.getElementById(idPantalla);
         if (pantallaActiva) pantallaActiva.classList.add('activa');
     }
-
     function mostrarNotificacion(mensaje) {
         const notificacion = document.getElementById('notificacion');
         const mensajeEl = document.getElementById('notificacion-mensaje');
@@ -59,14 +65,16 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { notificacion.classList.remove('mostrar'); }, 3000);
     }
 
-    // --- FUNCIONES DE CÁLCULO ---
+    // --- FUNCIONES DE CÁLCULO (CON LA NUEVA LÓGICA) ---
     const sumarDigitos = (str) => String(str).split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
 
     function obtenerNumerosBase(fecha) {
         const [ano, mes, dia] = fecha.split('-');
         let numeros = [sumarDigitos(ano), sumarDigitos(mes), sumarDigitos(dia)];
         let total = numeros.reduce((acc, n) => acc + n, 0);
-        while (total > 22) {
+        
+        // CAMBIO CLAVE: El límite ahora es 27
+        while (total > 27) {
             let reducido = false;
             for (let i = 0; i < numeros.length; i++) {
                 if (numeros[i] > 9) {
@@ -87,10 +95,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const base = numerosFinales[1] + numerosFinales[2]; // mes + día
         const sumaAnoObjetivo = sumarDigitos(String(anoObjetivo));
         let resultado = base + sumaAnoObjetivo;
-        while (resultado > 22) { resultado = sumarDigitos(String(resultado)); }
+        
+        // CAMBIO CLAVE: El límite ahora es 27
+        while (resultado > 27) { 
+            resultado = sumarDigitos(String(resultado)); 
+        }
         return resultado === 0 ? 22 : resultado;
     }
 
+    // --- El resto del archivo permanece sin cambios ---
     // --- FUNCIONES DE VISUALIZACIÓN ---
     function mostrarResultado(numeroArcano, esAnual = false, ano = null) {
         const arcano = arcanos[numeroArcano];
@@ -111,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const btnCalcularAnualGrande = document.getElementById('btn-calcular-anual-grande');
             if (btnCalcularAnualGrande) {
                 btnCalcularAnualGrande.addEventListener('click', () => {
-                    fechaParaCalculoAnual = datosCalculoActual.fechaNacimiento; // Guardamos la fecha actual
+                    fechaParaCalculoAnual = datosCalculoActual.fechaNacimiento;
                     inputAno.value = new Date().getFullYear();
                     modalAnual.classList.add('activa');
                 });
@@ -127,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tablaContainer.innerHTML = "<p>Aún no has guardado ningún arcano.</p>";
             return;
         }
-        let tablaHTML = `<table class="tabla-bonita"><thead><tr><th>Nombre</th><th>Arcano</th><th>Del año</th></tr></thead><tbody>`;
+        let tablaHTML = `<table class="tabla-bonita"><thead><tr><th>Nombre</th><th>Arcano</th><th>Año</th></tr></thead><tbody>`;
         guardados.forEach(persona => {
             const arcanoInfo = arcanos[persona.numeroArcano] || { nombre: "Desconocido" };
             tablaHTML += `
@@ -173,7 +186,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // EVENT LISTENER PARA LA TABLA (Delegación de eventos)
     if (tablaContainer) {
         tablaContainer.addEventListener('click', (e) => {
             if (e.target && e.target.matches('.btn-arcano-link')) {
@@ -181,14 +193,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!isNaN(numeroArcano)) mostrarResultado(numeroArcano);
             }
             if (e.target && e.target.matches('.btn-calcular-anual-guardado')) {
-                fechaParaCalculoAnual = e.target.dataset.fechaNacimiento; // Guardamos la fecha del botón
+                fechaParaCalculoAnual = e.target.dataset.fechaNacimiento;
                 inputAno.value = new Date().getFullYear();
                 modalAnual.classList.add('activa');
             }
         });
     }
 
-    // EVENT LISTENERS PARA EL MODAL
     if (btnCalcularModal) {
         btnCalcularModal.addEventListener('click', () => {
             const anoObjetivo = parseInt(inputAno.value, 10);
