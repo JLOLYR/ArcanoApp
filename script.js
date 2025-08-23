@@ -1,7 +1,7 @@
-// script.js (Versión Final con Arcanos Menores)
+// script.js (Versión Final con Lógica de Etapas Corregida)
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- DATOS DE LOS ARCANOS ---
+    // --- DATOS DE LOS ARCANOS (incluye 23-27) ---
     const arcanos = {
         1: { nombre: "I - El Mago", imagen: "Mago.png", texto: "Representa el poder, la habilidad y la concentración." },
         2: { nombre: "II - La Sacerdotisa", imagen: "Sacerdotisa.png", texto: "Simboliza la intuición, los secretos y el conocimiento oculto." },
@@ -25,13 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
         20: { nombre: "XX - El Juicio", imagen: "Juicio.png", texto: "Simboliza el renacimiento, la evaluación y la redención." },
         21: { nombre: "XXI - El Mundo", imagen: "Mundo.png", texto: "Representa la realización, la integración y el final de un ciclo." },
         22: { nombre: "XXII - El Loco", imagen: "Loco.png", texto: "Simboliza el comienzo, la espontaneidad y la fe ciega." },
-        
-        // --- NUEVAS CARTAS AÑADIDAS ---
-        23: { nombre: "Rey de Bastos", imagen: "Rey bastos.png", texto: "Simboliza el liderazgo, la visión y la audacia. Un líder natural que inspira a otros." },
-        24: { nombre: "Reina de Bastos", imagen: "Reina bastos.png", texto: "Representa la vitalidad, la independencia y la confianza. Una persona carismática y segura." },
-        25: { nombre: "Caballero de Bastos", imagen: "Caballero bastos.png", texto: "Simboliza la energía, la pasión y la acción impulsiva. Es el momento de perseguir una meta con audacia." },
-        26: { nombre: "Paje de Bastos", imagen: "Paje bastos.png", texto: "Representa el entusiasmo, la exploración y las buenas noticias. El inicio de una nueva y emocionante aventura." },
-        27: { nombre: "Diez de Bastos", imagen: "Diez bastos.png", texto: "Simboliza la carga, la responsabilidad y el trabajo duro. Estás cerca de la meta, pero sientes el peso del esfuerzo." }
+        23: { nombre: "Rey de Bastos", imagen: "Rey bastos.png", texto: "Simboliza el liderazgo, la visión y la audacia." },
+        24: { nombre: "Reina de Bastos", imagen: "Reina bastos.png", texto: "Representa la vitalidad, la independencia y la confianza." },
+        25: { nombre: "Caballero de Bastos", imagen: "Caballero bastos.png", texto: "Simboliza la energía, la pasión y la acción impulsiva." },
+        26: { nombre: "Paje de Bastos", imagen: "Paje bastos.png", texto: "Representa el entusiasmo, la exploración y las buenas noticias." },
+        27: { nombre: "Diez de Bastos", imagen: "Diez bastos.png", texto: "Simboliza la carga, la responsabilidad y el trabajo duro." }
     };
 
     // --- SELECTORES DE ELEMENTOS (Sin cambios) ---
@@ -65,45 +63,81 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { notificacion.classList.remove('mostrar'); }, 3000);
     }
 
-    // --- FUNCIONES DE CÁLCULO (CON LA NUEVA LÓGICA) ---
+    // --- FUNCIONES DE CÁLCULO (LÓGICA NUEVA Y PRECISA) ---
     const sumarDigitos = (str) => String(str).split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
 
     function obtenerNumerosBase(fecha) {
         const [ano, mes, dia] = fecha.split('-');
-        let numeros = [sumarDigitos(ano), sumarDigitos(mes), sumarDigitos(dia)];
-        let total = numeros.reduce((acc, n) => acc + n, 0);
         
-        // CAMBIO CLAVE: El límite ahora es 27
-        while (total > 27) {
-            let reducido = false;
-            for (let i = 0; i < numeros.length; i++) {
-                if (numeros[i] > 9) {
-                    numeros[i] = sumarDigitos(String(numeros[i]));
-                    reducido = true; break;
-                }
+        // Etapa 1: Suma Inicial
+        let numAno = sumarDigitos(ano);
+        let numMes = sumarDigitos(mes);
+        let numDia = sumarDigitos(dia);
+        
+        // Etapa 2: Bucle de Reducción
+        while (true) {
+            let total = numAno + numMes + numDia;
+
+            // Condición de salida 1: El total es 22 o menos. Es un resultado válido.
+            if (total <= 22) {
+                break;
             }
-            if (!reducido) break;
-            total = numeros.reduce((acc, n) => acc + n, 0);
+
+            // Condición de salida 2 (Caso Excepcional): El total es mayor a 22, pero ya no se puede reducir nada más.
+            // Esto permite que resultados como 23, 27, etc., sean válidos al final.
+            const sePuedeReducir = numAno > 9 || numMes > 9 || numDia > 9;
+            if (!sePuedeReducir) {
+                break;
+            }
+
+            // Si ninguna condición de salida se cumple, se procede a reducir una vez por iteración.
+            // Se reduce de derecha a izquierda: primero año, luego mes, luego día.
+            if (numAno > 9) {
+                numAno = sumarDigitos(String(numAno));
+            } else if (numMes > 9) {
+                numMes = sumarDigitos(String(numMes));
+            } else if (numDia > 9) {
+                numDia = sumarDigitos(String(numDia));
+            }
         }
-        return { numerosFinales: numeros, arcano: total === 0 ? 22 : total };
+        
+        let resultadoFinal = numAno + numMes + numDia;
+        
+        return {
+            numerosFinales: [numAno, numMes, numDia], // Guardamos los números finales por si se necesitan
+            arcano: resultadoFinal === 0 ? 22 : resultadoFinal // El arcano es el total al salir del bucle
+        };
     }
 
-    function calcularArcanoPersonal(fecha) { return obtenerNumerosBase(fecha).arcano; }
+    function calcularArcanoPersonal(fecha) {
+        return obtenerNumerosBase(fecha).arcano;
+    }
 
     function calcularArcanoAnual(fechaNacimiento, anoObjetivo) {
-        const { numerosFinales } = obtenerNumerosBase(fechaNacimiento);
-        const base = numerosFinales[1] + numerosFinales[2]; // mes + día
+        // Para el arcano anual, la base SIEMPRE se reduce a un solo dígito por componente.
+        const [anoNacimiento, mesNacimiento, diaNacimiento] = fechaNacimiento.split('-');
+        let baseDia = sumarDigitos(diaNacimiento);
+        while(baseDia > 9) baseDia = sumarDigitos(String(baseDia));
+        
+        let baseMes = sumarDigitos(mesNacimiento);
+        while(baseMes > 9) baseMes = sumarDigitos(String(baseMes));
+
+        const base = baseDia + baseMes;
         const sumaAnoObjetivo = sumarDigitos(String(anoObjetivo));
         let resultado = base + sumaAnoObjetivo;
         
-        // CAMBIO CLAVE: El límite ahora es 27
+        // En el cálculo anual, el resultado final sí se reduce si supera 22,
+        // excepto en el caso excepcional final que lo lleva hasta 27.
         while (resultado > 27) { 
             resultado = sumarDigitos(String(resultado)); 
         }
+        
         return resultado === 0 ? 22 : resultado;
     }
 
-    // --- El resto del archivo permanece sin cambios ---
+
+    // --- El resto del archivo (VISUALIZACIÓN Y EVENTOS) permanece sin cambios ---
+    // ... (El resto del código es idéntico al de la respuesta anterior) ...
     // --- FUNCIONES DE VISUALIZACIÓN ---
     function mostrarResultado(numeroArcano, esAnual = false, ano = null) {
         const arcano = arcanos[numeroArcano];
