@@ -1,0 +1,21 @@
+{
+    "name": "Arcano Personal",
+    "short_name": "Arcano",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#191028",
+    "theme_color": "#3c2a58",
+    "description": "Calculadora de Arcano Personal y Anual.",
+    "icons": [
+        {
+            "src": "Iconos/icon-192x192.png", 
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "Iconos/icon-512x512.png", 
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

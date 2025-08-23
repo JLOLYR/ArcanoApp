@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Arcano Personal</title>
+    
+    <!-- CORRECCIÓN DE RUTA AQUÍ -->
+    <link rel="icon" type="image/png" href="Iconos/sun.png"> <!-- Usamos el sol como favicon -->
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Pantalla de Inicio -->
+    <div id="inicio" class="pantalla activa">
+        <div class="contenido">
+            <h1>Arcano Personal</h1>
+            <p>Descubre el arquetipo que guía tu vida.</p>
+            <button id="btn-nuevo" class="btn-principal">Calcular Nuevo Arcano</button>
+            <button id="btn-ver-guardados" class="btn-secundario">Ver Guardados</button>
+        </div>
+    </div>
+
+    <!-- Pantalla para Ingresar Datos -->
+    <div id="calculo" class="pantalla">
+        <div class="contenido">
+            <h2>Ingresa tus Datos</h2>
+            <form id="formulario-arcano">
+                <input type="text" id="nombre" placeholder="Escribe tu nombre" required>
+                <input type="date" id="fecha-nacimiento" required>
+                <button type="submit" class="btn-principal">Calcular</button>
+                <button type="button" id="btn-volver-inicio-1" class="btn-secundario">Volver</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Pantalla de Resultados -->
+    <div id="resultado" class="pantalla">
+        <div id="resultado-contenido" class="contenido"></div>
+        <div class="flotantes">
+            <button id="btn-guardar" class="btn-flotante" title="Guardar Arcano">💾</button>
+            <button id="btn-volver-inicio-2" class="btn-flotante" title="Volver al Inicio">↩️</button>
+        </div>
+    </div>
+    
+    <!-- Pantalla de Guardados -->
+    <div id="guardados" class="pantalla">
+        <div class="contenido">
+            <h2>Arcanos Guardados</h2>
+            <div id="tabla-guardados-container"></div>
+            <button id="btn-volver-inicio-3" class="btn-secundario">Volver</button>
+        </div>
+    </div>
+
+    <!-- Pantalla de Notificación Personalizada -->
+    <div id="notificacion" class="notificacion-oculta">
+        <p id="notificacion-mensaje"></p>
+    </div>
+
+    <!-- Modal para Calcular Año -->
+    <div id="modal-anual" class="pantalla">
+        <div class="contenido">
+            <h2>Calcular Arcano del Año</h2>
+            <p>Ingresa el año que deseas consultar.</p>
+            <input type="number" id="input-ano" placeholder="Ej: 2025" min="1000" max="9999">
+            <button id="btn-calcular-modal" class="btn-principal">Calcular</button>
+            <button id="btn-cancelar-modal" class="btn-secundario">Cancelar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js').then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }).catch(error => {
+                    console.log('ServiceWorker registration failed: ', error);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
