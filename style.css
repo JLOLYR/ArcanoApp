@@ -132,7 +132,7 @@ input[type="text"], input[type="date"], input[type="number"] {
 
 /* Celdas de días, meses y años */
 .datepicker-cell {
-    color: var(--blanco-puro);
+    color:  #a29c24fd;;
     border-radius: 50%;
 }
 .datepicker-cell:hover {
@@ -144,10 +144,11 @@ input[type="text"], input[type="date"], input[type="number"] {
 .datepicker-cell.selected, 
 .datepicker-cell.selected:hover,
 .datepicker-cell.selected.focused {
-    background-color: var(--dorado-brillante); /* Fondo dorado brillante */
-    color: var(--indigo-fondo); /* Texto índigo oscuro para máximo contraste */
-    font-weight: bold; /* Texto en negrita para que resalte más */
-    border: 1px solid var(--dorado-brillante); /* Borde del mismo color para un acabado nítido */
+    background-color: var(--dorado-brillante) !important; /* Fondo dorado brillante (FORZADO) */
+    color: var(--indigo-fondo) !important;              /* Texto índigo oscuro (FORZADO) */
+    font-weight: bold;
+    border: none !important;                           /* Quitamos cualquier borde conflictivo (FORZADO) */
+    border-radius: 50%;
 }
 .datepicker-cell.disabled, 
 .datepicker-cell.prev, 
