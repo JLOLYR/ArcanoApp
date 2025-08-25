@@ -66,8 +66,20 @@ input[type="text"], input[type="date"], input[type="number"] {
 .btn-flotante:hover { transform: scale(1.1); }
 #tabla-guardados-container { max-height: 60vh; overflow-y: auto; }
 .tabla-bonita { width: 100%; border-collapse: collapse; margin-top: 20px; }
-.tabla-bonita th, .tabla-bonita td { padding: 12px; border: 1px solid var(--dorado-brillante); text-align: left; }
-.tabla-bonita th { background-color: rgba(255, 215, 0, 0.2); color: var(--dorado-brillante); font-family: 'Cinzel', serif; }
+.tabla-bonita th, .tabla-bonita td {
+    padding: 12px 8px; /* Reducimos un poco el padding lateral */
+    border: 1px solid var(--dorado-brillante);
+    text-align: left;
+    word-break: break-word; /* Evita que nombres largos rompan la tabla */
+}
+
+/* Y busca este otro bloque y reemplázalo */
+.tabla-bonita {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    table-layout: fixed; /* Esto es importante para respetar los anchos */
+}.tabla-bonita th { background-color: rgba(255, 215, 0, 0.2); color: var(--dorado-brillante); font-family: 'Cinzel', serif; }
 #notificacion {
     position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
     background-color: var(--violeta-suave); color: var(--dorado-brillante); padding: 15px 30px;
@@ -89,3 +101,102 @@ input[type="text"], input[type="date"], input[type="number"] {
     border-radius: 5px; padding: 5px 10px; cursor: pointer; transition: all 0.3s ease;
 }
 .btn-calcular-anual-guardado:hover { background-color: var(--dorado-brillante); color: var(--indigo-fondo); }
+.label-ayuda {
+    display: block;
+    text-align: left;
+    font-size: 0.8em;
+    color: var(--blanco-puro);
+    opacity: 0.7;
+    margin-bottom: 5px; /* Pequeño espacio sobre el campo de fecha */
+}
+
+.datepicker-picker {
+    background-color: var(--indigo-fondo);
+    border: 1px solid var(--dorado-brillante);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px var(--sombra-color);
+}
+
+/* Encabezado (donde se cambia de mes/año) */
+.datepicker-header .datepicker-title,
+.datepicker-header .prev-btn, 
+.datepicker-header .next-btn {
+    color: var(--dorado-brillante);
+    font-family: 'Cinzel', serif;
+}
+.datepicker-header .prev-btn:hover, 
+.datepicker-header .next-btn:hover,
+.datepicker-header .datepicker-title:hover {
+    background-color: var(--violeta-suave);
+}
+
+/* Celdas de días, meses y años */
+.datepicker-cell {
+    color: var(--blanco-puro);
+    border-radius: 50%;
+}
+.datepicker-cell:hover {
+    background-color: var(--violeta-suave);
+}
+.datepicker-cell.focused {
+    border: 1px solid var(--dorado-brillante);
+}
+.datepicker-cell.selected, 
+.datepicker-cell.selected:hover,
+.datepicker-cell.selected.focused {
+    background-color: var(--dorado-brillante); /* Fondo dorado brillante */
+    color: var(--indigo-fondo); /* Texto índigo oscuro para máximo contraste */
+    font-weight: bold; /* Texto en negrita para que resalte más */
+    border: 1px solid var(--dorado-brillante); /* Borde del mismo color para un acabado nítido */
+}
+.datepicker-cell.disabled, 
+.datepicker-cell.prev, 
+.datepicker-cell.next {
+    color: var(--blanco-puro);
+    opacity: 0.3;
+}
+
+/* Nombres de los días de la semana (D, L, M...) */
+.datepicker-days .dow {
+    color: var(--dorado-brillante);
+    opacity: 0.7;
+}
+
+/* Ocultar el pie de página (botones today/clear) que no necesitamos */
+.datepicker-footer {
+    display: none;
+}
+/* Botón para el arcano implícito */
+#btn-arcano-implicito {
+    margin-top: 15px; /* Espacio entre este y el botón de arriba */
+}
+
+/* Botón de eliminar (X) en la tabla */
+.btn-eliminar {
+    background-color: #9d2525; /* Un rojo oscuro */
+    color: var(--blanco-puro);
+    border: 1px solid #ff7b7b; /* Borde rojo claro */
+    border-radius: 50%; /* Lo hacemos circular */
+    width: 28px;
+    height: 28px;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    line-height: 24px; /* Centra la X verticalmente */
+}
+
+.btn-eliminar:hover {
+    background-color: #c53030;
+    transform: scale(1.1);
+}
+
+/* Párrafo del mensaje de confirmación */
+#modal-confirmar-mensaje {
+    margin-bottom: 2em;
+    font-size: 1.1em;
+}
+.celda-eliminar {
+    text-align: center;      /* Centra horizontalmente */
+    vertical-align: middle;  /* Centra verticalmente */
+}

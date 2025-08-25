@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Arcano Personal</title>
-    
-    <!-- CORRECCIÓN DE RUTA AQUÍ -->
-    <link rel="icon" type="image/png" href="Iconos/sun.png"> <!-- Usamos el sol como favicon -->
-
+    <link rel="icon" type="image/png" href="Iconos/sun.png">
     <link rel="manifest" href="manifest.json">
+    
+    <!-- ARCHIVOS DE LA LIBRERÍA DE CALENDARIO -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker-bs5.min.css">
+    
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,7 +33,7 @@
             <h2>Ingresa tus Datos</h2>
             <form id="formulario-arcano">
                 <input type="text" id="nombre" placeholder="Escribe tu nombre" required>
-                <input type="date" id="fecha-nacimiento" required>
+                <input type="text" id="fecha-nacimiento" placeholder="Selecciona tu fecha de nacimiento" readonly required>
                 <button type="submit" class="btn-principal">Calcular</button>
                 <button type="button" id="btn-volver-inicio-1" class="btn-secundario">Volver</button>
             </form>
@@ -72,6 +73,19 @@
             <button id="btn-cancelar-modal" class="btn-secundario">Cancelar</button>
         </div>
     </div>
+
+    <!-- MODAL PARA CONFIRMAR ELIMINACIÓN (AÑADIR ESTO) -->
+    <div id="modal-confirmar" class="pantalla">
+        <div class="contenido">
+            <h2>Confirmar Eliminación</h2>
+            <p id="modal-confirmar-mensaje"></p>
+            <button id="btn-confirmar-delete" class="btn-principal">Confirmar</button>
+            <button id="btn-cancelar-delete" class="btn-secundario">Cancelar</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/locales/es.js"></script>
 
     <script src="script.js"></script>
     <script>

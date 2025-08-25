@@ -1,7 +1,7 @@
-// script.js (Versión Final con Lógica de Etapas Corregida)
+// script.js (Versión Final con Base Anual Corregida)
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- DATOS DE LOS ARCANOS (incluye 23-27) ---
+    // --- DATOS DE LOS ARCANOS ---
     const arcanos = {
         1: { nombre: "I - El Mago", imagen: "Mago.png", texto: "Representa el poder, la habilidad y la concentración." },
         2: { nombre: "II - La Sacerdotisa", imagen: "Sacerdotisa.png", texto: "Simboliza la intuición, los secretos y el conocimiento oculto." },
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         14: { nombre: "XIV - La Templanza", imagen: "Templanza.png", texto: "Simboliza el equilibrio, la paciencia y la moderación." },
         15: { nombre: "XV - El Diablo", imagen: "Diablo.png", texto: "Representa las adicciones, las ataduras y el materialismo." },
         16: { nombre: "XVI - La Torre", imagen: "Torre.png", texto: "Simboliza la destrucción súbita, el caos y la revelación." },
-        17: { nombre: "XVII - La Estrella", imagen: "Estrella.png", texto: "Representa la esperanza, la inspiración y la serenidad." },
+        17: { nombre: "XVII - La Estrella", imagen: "Estrella.png", texto: "Representa la esperanza, la serenidad y la inspiración." },
         18: { nombre: "XVIII - La Luna", imagen: "Luna.png", texto: "Simboliza la ilusión, el miedo y el subconsciente." },
         19: { nombre: "XIX - El Sol", imagen: "Sol.png", texto: "Representa la alegría, el éxito y la vitalidad." },
         20: { nombre: "XX - El Juicio", imagen: "Juicio.png", texto: "Simboliza el renacimiento, la evaluación y la redención." },
@@ -31,8 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         26: { nombre: "Paje de Bastos", imagen: "Paje bastos.png", texto: "Representa el entusiasmo, la exploración y las buenas noticias." },
         27: { nombre: "Diez de Bastos", imagen: "Diez bastos.png", texto: "Simboliza la carga, la responsabilidad y el trabajo duro." }
     };
-
-    // --- SELECTORES DE ELEMENTOS (Sin cambios) ---
+    const implicitos = { 1: 10, 2: 11, 3: 12, 4: 13, 5: 14, 6: 15, 7: 16, 8: 17, 9: 18, 10: 1, 11: 2, 12: 3, 13: 4, 14: 5, 15: 6, 16: 7, 17: 8, 18: 9, 19: 10, 20: 2, 21: 3, 22: 4 };
     const pantallas = document.querySelectorAll('.pantalla');
     const btnNuevo = document.getElementById('btn-nuevo');
     const btnVerGuardados = document.getElementById('btn-ver-guardados');
@@ -45,205 +44,144 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCalcularModal = document.getElementById('btn-calcular-modal');
     const btnCancelarModal = document.getElementById('btn-cancelar-modal');
     const tablaContainer = document.getElementById('tabla-guardados-container');
+    const modalConfirmar = document.getElementById('modal-confirmar');
+    const modalConfirmarMensaje = document.getElementById('modal-confirmar-mensaje');
+    const btnConfirmarDelete = document.getElementById('btn-confirmar-delete');
+    const btnCancelarDelete = document.getElementById('btn-cancelar-delete');
     let datosCalculoActual = {};
-    let fechaParaCalculoAnual = '';
+    let nombreParaEliminar = '';
+    const datepickerElem = document.getElementById('fecha-nacimiento');
+    if (datepickerElem) { new Datepicker(datepickerElem, { language: 'es', autohide: true, format: 'yyyy-mm-dd', buttonClass: 'btn' }); }
 
-    // --- FUNCIONES BÁSICAS (Sin cambios) ---
-    function cambiarPantalla(idPantalla) {
-        pantallas.forEach(p => p.classList.remove('activa'));
-        const pantallaActiva = document.getElementById(idPantalla);
-        if (pantallaActiva) pantallaActiva.classList.add('activa');
-    }
-    function mostrarNotificacion(mensaje) {
-        const notificacion = document.getElementById('notificacion');
-        const mensajeEl = document.getElementById('notificacion-mensaje');
-        if (!notificacion || !mensajeEl) return;
-        mensajeEl.textContent = mensaje;
-        notificacion.classList.add('mostrar');
-        setTimeout(() => { notificacion.classList.remove('mostrar'); }, 3000);
-    }
-
-    // --- FUNCIONES DE CÁLCULO (LÓGICA NUEVA Y PRECISA) ---
+    function cambiarPantalla(idPantalla) { pantallas.forEach(p => p.classList.remove('activa')); const pantallaActiva = document.getElementById(idPantalla); if (pantallaActiva) pantallaActiva.classList.add('activa'); }
+    function mostrarNotificacion(mensaje) { const notificacion = document.getElementById('notificacion'); const mensajeEl = document.getElementById('notificacion-mensaje'); if (!notificacion || !mensajeEl) return; mensajeEl.textContent = mensaje; notificacion.classList.add('mostrar'); setTimeout(() => { notificacion.classList.remove('mostrar'); }, 3000); }
+    
+    // --- FUNCIONES DE CÁLCULO (LÓGICA CORREGIDA) ---
     const sumarDigitos = (str) => String(str).split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
-
-    function obtenerNumerosBase(fecha) {
+    
+    function calcularArcanoPersonal(fecha) {
         const [ano, mes, dia] = fecha.split('-');
-        
-        // Etapa 1: Suma Inicial
+        let numDia = parseInt(dia, 10);
+        let numMes = parseInt(mes, 10);
         let numAno = sumarDigitos(ano);
-        let numMes = sumarDigitos(mes);
-        let numDia = sumarDigitos(dia);
-        
-        // Etapa 2: Bucle de Reducción
+
         while (true) {
-            let total = numAno + numMes + numDia;
-
-            // Condición de salida 1: El total es 22 o menos. Es un resultado válido.
-            if (total <= 22) {
-                break;
-            }
-
-            // Condición de salida 2 (Caso Excepcional): El total es mayor a 22, pero ya no se puede reducir nada más.
-            // Esto permite que resultados como 23, 27, etc., sean válidos al final.
-            const sePuedeReducir = numAno > 9 || numMes > 9 || numDia > 9;
-            if (!sePuedeReducir) {
-                break;
-            }
-
-            // Si ninguna condición de salida se cumple, se procede a reducir una vez por iteración.
-            // Se reduce de derecha a izquierda: primero año, luego mes, luego día.
-            if (numAno > 9) {
-                numAno = sumarDigitos(String(numAno));
-            } else if (numMes > 9) {
-                numMes = sumarDigitos(String(numMes));
-            } else if (numDia > 9) {
+            let total = numDia + numMes + numAno;
+            if (total <= 22) break;
+            const sePuedeReducir = numDia > 9 || numMes > 9 || numAno > 9;
+            if (!sePuedeReducir) break;
+            const maxNum = Math.max(numDia, numMes, numAno);
+            if (numDia === maxNum) {
                 numDia = sumarDigitos(String(numDia));
+            } else if (numAno === maxNum) {
+                numAno = sumarDigitos(String(numAno));
+            } else {
+                numMes = sumarDigitos(String(numMes));
             }
         }
-        
-        let resultadoFinal = numAno + numMes + numDia;
-        
-        return {
-            numerosFinales: [numAno, numMes, numDia], // Guardamos los números finales por si se necesitan
-            arcano: resultadoFinal === 0 ? 22 : resultadoFinal // El arcano es el total al salir del bucle
-        };
+        const arcanoFinal = numDia + numMes + numAno;
+        const baseAnual = numDia + numMes; // LA BASE SE TOMA DE LOS NÚMEROS FINALES, SIN MÁS REDUCCIÓN
+        return { arcano: arcanoFinal === 0 ? 22 : arcanoFinal, baseAnual: baseAnual };
     }
-
-    function calcularArcanoPersonal(fecha) {
-        return obtenerNumerosBase(fecha).arcano;
-    }
-
-    function calcularArcanoAnual(fechaNacimiento, anoObjetivo) {
-        // Para el arcano anual, la base SIEMPRE se reduce a un solo dígito por componente.
-        const [anoNacimiento, mesNacimiento, diaNacimiento] = fechaNacimiento.split('-');
-        let baseDia = sumarDigitos(diaNacimiento);
-        while(baseDia > 9) baseDia = sumarDigitos(String(baseDia));
-        
-        let baseMes = sumarDigitos(mesNacimiento);
-        while(baseMes > 9) baseMes = sumarDigitos(String(baseMes));
-
-        const base = baseDia + baseMes;
+    
+    function calcularArcanoAnual(base, anoObjetivo) {
         const sumaAnoObjetivo = sumarDigitos(String(anoObjetivo));
         let resultado = base + sumaAnoObjetivo;
-        
-        // En el cálculo anual, el resultado final sí se reduce si supera 22,
-        // excepto en el caso excepcional final que lo lleva hasta 27.
-        while (resultado > 27) { 
-            resultado = sumarDigitos(String(resultado)); 
+        while (resultado > 27) {
+            resultado = sumarDigitos(String(resultado));
         }
-        
         return resultado === 0 ? 22 : resultado;
     }
-
-
-    // --- El resto del archivo (VISUALIZACIÓN Y EVENTOS) permanece sin cambios ---
-    // ... (El resto del código es idéntico al de la respuesta anterior) ...
+    
     // --- FUNCIONES DE VISUALIZACIÓN ---
-    function mostrarResultado(numeroArcano, esAnual = false, ano = null) {
-        const arcano = arcanos[numeroArcano];
-        if (!arcano) return;
-        let titulo = esAnual ? `Arcano del Año ${ano}` : "Tu Arcano Personal";
-        let contenidoHTML = `
-            <h2 id="titulo-arcano">${titulo}</h2>
-            <img src="Arcanos/${arcano.imagen}" alt="${arcano.nombre}" id="arcano-imagen">
-            <h3 id="arcano-nombre">${arcano.nombre}</h3>
-            <p id="arcano-texto">${arcano.texto}</p>`;
-
-        if (!esAnual) {
+    function mostrarResultado(numeroArcano, esAnual = false, ano = null, esImplicito = false) {
+        const arcano = arcanos[numeroArcano]; if (!arcano) return;
+        let titulo = "Tu Arcano Personal";
+        if (datosCalculoActual.nombre) {
+            titulo = `${esImplicito ? 'Arcano Implícito' : esAnual ? 'Arcano del Año' : 'Arcano Personal'} de ${datosCalculoActual.nombre}`;
+            if (esAnual && ano) titulo = `Arcano del Año ${ano} para ${datosCalculoActual.nombre}`;
+        }
+        let contenidoHTML = `<h2 id="titulo-arcano">${titulo}</h2><img src="Arcanos/${arcano.imagen}" alt="${arcano.nombre}" id="arcano-imagen"><h3 id="arcano-nombre">${arcano.nombre}</h3><p id="arcano-texto">${arcano.texto}</p>`;
+        if (!esAnual && !esImplicito) {
             contenidoHTML += `<button id="btn-calcular-anual-grande" class="btn-secundario">Calcular Arcano del Año</button>`;
+            if (implicitos[numeroArcano]) { contenidoHTML += `<button id="btn-arcano-implicito" class="btn-secundario">Ver Arcano Implícito</button>`; }
         }
         resultadoContenido.innerHTML = contenidoHTML;
-
-        if (!esAnual) {
-            const btnCalcularAnualGrande = document.getElementById('btn-calcular-anual-grande');
-            if (btnCalcularAnualGrande) {
-                btnCalcularAnualGrande.addEventListener('click', () => {
-                    fechaParaCalculoAnual = datosCalculoActual.fechaNacimiento;
-                    inputAno.value = new Date().getFullYear();
-                    modalAnual.classList.add('activa');
-                });
-            }
+        if (!esAnual && !esImplicito) {
+            const btnCalcularAnualGrande = document.getElementById('btn-calcular-anual-grande'); if (btnCalcularAnualGrande) { btnCalcularAnualGrande.addEventListener('click', () => { inputAno.value = new Date().getFullYear(); modalAnual.classList.add('activa'); }); }
+            const btnArcanoImplicito = document.getElementById('btn-arcano-implicito'); if (btnArcanoImplicito) { btnArcanoImplicito.addEventListener('click', () => { const numeroImplicito = implicitos[numeroArcano]; mostrarResultado(numeroImplicito, false, null, true); }); }
         }
         cambiarPantalla('resultado');
     }
-
+    
     function mostrarGuardados() {
-        const guardados = JSON.parse(localStorage.getItem('arcanosGuardados')) || [];
-        if (!tablaContainer) return;
-        if (guardados.length === 0) {
-            tablaContainer.innerHTML = "<p>Aún no has guardado ningún arcano.</p>";
-            return;
-        }
-        let tablaHTML = `<table class="tabla-bonita"><thead><tr><th>Nombre</th><th>Arcano</th><th>Año</th></tr></thead><tbody>`;
+        const guardados = JSON.parse(localStorage.getItem('arcanosGuardados')) || []; if (!tablaContainer) return;
+        if (guardados.length === 0) { tablaContainer.innerHTML = "<p>Aún no has guardado ningún arcano.</p>"; return; }
+        let tablaHTML = `<table class="tabla-bonita"><thead><tr><th>Nombre</th><th>Fecha Nac.</th><th>Arcano</th><th></th></tr></thead><tbody>`;
         guardados.forEach(persona => {
             const arcanoInfo = arcanos[persona.numeroArcano] || { nombre: "Desconocido" };
-            tablaHTML += `
-                <tr>
-                    <td>${persona.nombre}</td>
-                    <td><button class="btn-arcano-link" data-arcano-numero="${persona.numeroArcano}">${arcanoInfo.nombre}</button></td>
-                    <td><button class="btn-calcular-anual-guardado" data-fecha-nacimiento="${persona.fechaNacimiento}">Calcular</button></td>
-                </tr>`;
+            tablaHTML += `<tr><td>${persona.nombre}</td><td>${persona.fechaNacimiento}</td><td><button class="btn-arcano-link" data-persona='${JSON.stringify(persona)}'>${arcanoInfo.nombre}</button></td><td class="celda-eliminar"><button class="btn-eliminar" data-nombre-eliminar="${persona.nombre}">X</button></td></tr>`;
         });
         tablaHTML += `</tbody></table>`;
         tablaContainer.innerHTML = tablaHTML;
     }
-
+    
     // --- EVENT LISTENERS ---
     if (btnNuevo) btnNuevo.addEventListener('click', () => cambiarPantalla('calculo'));
-    if (btnVerGuardados) btnVerGuardados.addEventListener('click', () => {
-        mostrarGuardados();
-        cambiarPantalla('guardados');
-    });
+    if (btnVerGuardados) btnVerGuardados.addEventListener('click', () => { mostrarGuardados(); cambiarPantalla('guardados'); });
     btnsVolver.forEach(btn => { if (btn) btn.addEventListener('click', () => cambiarPantalla('inicio')); });
 
     if (formulario) formulario.addEventListener('submit', (e) => {
         e.preventDefault();
-        const nombre = document.getElementById('nombre').value;
-        const fechaNacimiento = document.getElementById('fecha-nacimiento').value;
-        if (nombre && fechaNacimiento) {
-            const numeroArcano = calcularArcanoPersonal(fechaNacimiento);
-            datosCalculoActual = { nombre, fechaNacimiento, numeroArcano };
-            mostrarResultado(numeroArcano);
-        }
+        const nombre = document.getElementById('nombre').value; const fechaNacimiento = document.getElementById('fecha-nacimiento').value;
+        if (nombre && fechaNacimiento) { const resultadoCalculo = calcularArcanoPersonal(fechaNacimiento); datosCalculoActual = { nombre, fechaNacimiento, numeroArcano: resultadoCalculo.arcano, baseAnual: resultadoCalculo.baseAnual }; mostrarResultado(resultadoCalculo.arcano); }
     });
 
     if (btnGuardar) btnGuardar.addEventListener('click', () => {
         if (datosCalculoActual.nombre) {
             let guardados = JSON.parse(localStorage.getItem('arcanosGuardados')) || [];
-            if (!guardados.some(p => p.nombre === datosCalculoActual.nombre)) {
-                guardados.push(datosCalculoActual);
-                localStorage.setItem('arcanosGuardados', JSON.stringify(guardados));
-                mostrarNotificacion(`${datosCalculoActual.nombre} ha sido guardado.`);
-            } else {
-                mostrarNotificacion(`${datosCalculoActual.nombre} ya estaba guardado.`);
-            }
+            if (!guardados.some(p => p.nombre === datosCalculoActual.nombre)) { guardados.push(datosCalculoActual); localStorage.setItem('arcanosGuardados', JSON.stringify(guardados)); mostrarNotificacion(`${datosCalculoActual.nombre} ha sido guardado.`); }
+            else { mostrarNotificacion(`${datosCalculoActual.nombre} ya estaba guardado.`); }
         }
     });
 
     if (tablaContainer) {
         tablaContainer.addEventListener('click', (e) => {
-            if (e.target && e.target.matches('.btn-arcano-link')) {
-                const numeroArcano = parseInt(e.target.dataset.arcanoNumero, 10);
-                if (!isNaN(numeroArcano)) mostrarResultado(numeroArcano);
-            }
-            if (e.target && e.target.matches('.btn-calcular-anual-guardado')) {
-                fechaParaCalculoAnual = e.target.dataset.fechaNacimiento;
-                inputAno.value = new Date().getFullYear();
-                modalAnual.classList.add('activa');
-            }
+            if (e.target && e.target.matches('.btn-arcano-link')) { const persona = JSON.parse(e.target.dataset.persona); datosCalculoActual = persona; mostrarResultado(persona.numeroArcano); }
+            if (e.target && e.target.matches('.btn-eliminar')) { nombreParaEliminar = e.target.dataset.nombreEliminar; if (modalConfirmarMensaje) modalConfirmarMensaje.textContent = `¿Seguro que deseas eliminar el registro de ${nombreParaEliminar}?`; if (modalConfirmar) modalConfirmar.classList.add('activa'); }
         });
     }
 
     if (btnCalcularModal) {
         btnCalcularModal.addEventListener('click', () => {
             const anoObjetivo = parseInt(inputAno.value, 10);
-            if (anoObjetivo && !isNaN(anoObjetivo) && fechaParaCalculoAnual) {
-                const numeroArcanoAnual = calcularArcanoAnual(fechaParaCalculoAnual, anoObjetivo);
-                mostrarResultado(numeroArcanoAnual, true, anoObjetivo);
+            if (anoObjetivo && !isNaN(anoObjetivo) && datosCalculoActual.baseAnual !== undefined) {
+                // CORRECCIÓN: USA DIRECTAMENTE LA BASE GUARDADA
+                const base = datosCalculoActual.baseAnual;
+                const numeroArcanoAnual = calcularArcanoAnual(base, anoObjetivo);
+                mostrarResultado(numeroArcanoAnual, true, anoObjetivo, false);
                 modalAnual.classList.remove('activa');
+            } else if(anoObjetivo && !isNaN(anoObjetivo) && datosCalculoActual.fechaNacimiento) {
+                 // Fallback por si la base no está guardada (registros antiguos)
+                 const resultadoCalculo = calcularArcanoPersonal(datosCalculoActual.fechaNacimiento);
+                 const base = resultadoCalculo.baseAnual;
+                 const numeroArcanoAnual = calcularArcanoAnual(base, anoObjetivo);
+                 mostrarResultado(numeroArcanoAnual, true, anoObjetivo, false);
+                 modalAnual.classList.remove('activa');
             }
         });
     }
 
-    if (btnCancelarModal) btnCancelarModal.addEventListener('click', () => modalAnual.classList.remove('activa'));
+    if (btnCancelarModal) { btnCancelarModal.addEventListener('click', () => { if (modalAnual) modalAnual.classList.remove('activa'); }); }
+    if (btnConfirmarDelete) {
+        btnConfirmarDelete.addEventListener('click', () => {
+            let guardados = JSON.parse(localStorage.getItem('arcanosGuardados')) || [];
+            const nuevosGuardados = guardados.filter(persona => persona.nombre !== nombreParaEliminar);
+            localStorage.setItem('arcanosGuardados', JSON.stringify(nuevosGuardados));
+            if (modalConfirmar) modalConfirmar.classList.remove('activa');
+            mostrarGuardados();
+            mostrarNotificacion(`${nombreParaEliminar} ha sido eliminado.`);
+        });
+    }
+    if (btnCancelarDelete) { btnCancelarDelete.addEventListener('click', () => { if (modalConfirmar) modalConfirmar.classList.remove('activa'); }); }
 });
