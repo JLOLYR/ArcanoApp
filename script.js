@@ -84,14 +84,22 @@ document.addEventListener('DOMContentLoaded', () => {
         return { arcano: arcanoFinal === 0 ? 22 : arcanoFinal, baseAnual: baseAnual };
     }
     
-    function calcularArcanoAnual(base, anoObjetivo) {
-        const sumaAnoObjetivo = sumarDigitos(String(anoObjetivo));
-        let resultado = base + sumaAnoObjetivo;
-        while (resultado > 27) {
-            resultado = sumarDigitos(String(resultado));
-        }
-        return resultado === 0 ? 22 : resultado;
+function calcularArcanoAnual(base, anoObjetivo) {
+    let sumaAno = sumarDigitos(String(anoObjetivo));
+    let resultado = base + sumaAno;
+
+    // Bucle de reducción específico para el Arcano Anual
+    while (resultado > 27) {
+        // La reducción se aplica SIEMPRE sobre la suma del año,
+        // nunca sobre la base.
+        sumaAno = sumarDigitos(String(sumaAno));
+        
+        // Se recalcula el resultado con la nueva suma del año reducida.
+        resultado = base + sumaAno;
     }
+
+    return resultado === 0 ? 22 : resultado;
+}
     
     // --- FUNCIONES DE VISUALIZACIÓN ---
     function mostrarResultado(numeroArcano, esAnual = false, ano = null, esImplicito = false) {

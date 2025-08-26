@@ -117,6 +117,12 @@ input[type="text"], input[type="date"], input[type="number"] {
     box-shadow: 0 10px 30px var(--sombra-color);
 }
 
+.datepicker-header .datepicker-title {
+    font-size: 1.5rem !important; /* Aumentamos significativamente el tamaño de la fuente */
+    padding: 0.5rem 0 !important; /* Ajustamos el padding para que no se vea apretado */
+    line-height: 1; /* Mejoramos el alineamiento vertical */
+}
+
 /* Encabezado (donde se cambia de mes/año) */
 .datepicker-header .datepicker-title,
 .datepicker-header .prev-btn, 
