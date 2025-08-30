@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Arcano Personal</title>
+    <title>Tu Arcana - Calculadora de Arcano</title>
     <link rel="icon" type="image/png" href="Iconos/sun.png">
     <link rel="manifest" href="manifest.json">
-    
-    <!-- ARCHIVOS DE LA LIBRERÍA DE CALENDARIO -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker-bs5.min.css">
-    
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,11 +17,21 @@
     <!-- Pantalla de Inicio -->
     <div id="inicio" class="pantalla activa">
         <div class="contenido">
-            <h1>Arcano Personal</h1>
+            <h1>Tu Arcana</h1>
             <p>Descubre el arquetipo que guía tu vida.</p>
             <button id="btn-nuevo" class="btn-principal">Calcular Nuevo Arcano</button>
             <button id="btn-ver-guardados" class="btn-secundario">Ver Guardados</button>
+            <button id="btn-arcana-dia" class="btn-secundario btn-extra">Arcana del Día</button>
+            <button id="btn-info" class="btn-secundario btn-extra">Información</button>
         </div>
+    </div>
+
+    <!-- Pantalla de Información -->
+    <div id="info" class="pantalla">
+        <div class="contenido" id="info-contenido">
+            <!-- El contenido se insertará aquí con JavaScript -->
+        </div>
+        <button type="button" id="btn-volver-inicio-4" class="btn-secundario btn-volver-info">Volver</button>
     </div>
 
     <!-- Pantalla para Ingresar Datos -->
@@ -74,7 +81,7 @@
         </div>
     </div>
 
-    <!-- MODAL PARA CONFIRMAR ELIMINACIÓN (AÑADIR ESTO) -->
+    <!-- Modal para Confirmar Eliminación -->
     <div id="modal-confirmar" class="pantalla">
         <div class="contenido">
             <h2>Confirmar Eliminación</h2>
@@ -91,8 +98,8 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js').then(registration => {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                navigator.serviceWorker.register('./service-worker.js').then(registration => {
+                    console.log('ServiceWorker registration successful');
                 }).catch(error => {
                     console.log('ServiceWorker registration failed: ', error);
                 });

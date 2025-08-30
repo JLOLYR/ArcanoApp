@@ -1,32 +1,16 @@
-/* style.css (Versión Final Verificada) */
 :root {
-    --violeta-suave: rgba(97, 44, 150, 0.85);
+    --violeta-suave: rgba(90, 60, 120, 0.85);
     --indigo-fondo: #191028;
-    --lavanda-gradiente: #582f9b;
+    --lavanda-gradiente: #3c2a58;
     --blanco-puro: #f0e8ff;
     --dorado-brillante: #e6c300;
     --sombra-color: rgba(0, 0, 0, 0.5);
+    --indigo-translucido: rgba(25, 16, 40, 0.5);
 }
-/* En style.css */
-
 body {
-    font-family: 'Lato', sans-serif;
-    margin: 0;
-    background-color: var(--indigo-fondo);
-    color: var(--blanco-puro);
-    overflow: hidden;
-    height: 100vh;
-
-    /* --- AJUSTES DEFINITIVOS PARA EL FONDO --- */
-    
-    background-image: url('Iconos/Fondo.pdf');
-    background-repeat: repeat;
-    
-    /* CAMBIO CLAVE: 'soft-light' es más sutil y se verá mejor en el fondo oscuro */
-    background-blend-mode: soft-light; /* Reemplazamos 'overlay' por 'soft-light' */
-
-    background-size: 100px;
-    opacity: 1; /* Nos aseguramos de que el fondo sea visible */
+    font-family: 'Lato', sans-serif; margin: 0; background-color: var(--indigo-fondo); color: var(--blanco-puro);
+    overflow: hidden; height: 100vh; background-image: url('Iconos/sun.png'); background-repeat: repeat;
+    background-blend-mode: soft-light; background-size: 100px;
 }
 .pantalla {
     display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -41,169 +25,95 @@ body {
     backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2);
 }
 h1, h2 { font-family: 'Cinzel', serif; color: var(--dorado-brillante); text-shadow: 2px 2px 4px var(--sombra-color); }
-.btn-principal, .btn-secundario {
-    display: block; width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px;
-    border: none; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s ease;
-}
+.btn-principal, 
+.btn-secundario { display: block; width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: none; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s ease; }
 .btn-principal { background-color: var(--dorado-brillante); color: var(--indigo-fondo); }
 .btn-principal:hover { box-shadow: 0 0 15px var(--dorado-brillante); transform: translateY(-2px); }
-.btn-secundario { background-color: transparent; color: var(--blanco-puro); border: 2px solid var(--dorado-brillante); }
-.btn-secundario:hover { background-color: var(--dorado-brillante); color: var(--indigo-fondo); }
-input[type="text"], input[type="date"], input[type="number"] {
-    width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid var(--dorado-brillante);
-    background-color: rgba(255, 255, 255, 0.1); color: var(--blanco-puro); font-size: 1em; box-sizing: border-box;
+.btn-secundario {
+    /* CAMBIO: Añadimos un fondo translúcido */
+    background-color: rgba(90, 60, 120, 0.75); 
+    color: var(--blanco-puro);
+    border: 2px solid var(--dorado-brillante);
 }
+
+.btn-secundario:hover {
+    background-color: var(--dorado-brillante);
+    color: var(--indigo-fondo);
+}
+
+input[type="text"], input[type="date"], input[type="number"] { width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid var(--dorado-brillante); background-color: rgba(255, 255, 255, 0.1); color: var(--blanco-puro); font-size: 1em; box-sizing: border-box; }
 #resultado-contenido { max-height: 80vh; overflow-y: auto; }
 #arcano-imagen { max-width: 70%; height: auto; border-radius: 15px; border: 3px solid var(--dorado-brillante); box-shadow: 0 5px 20px var(--sombra-color); }
 #arcano-nombre { font-size: 2em; margin: 15px 0 10px 0; }
 #arcano-texto { font-size: 0.9em; text-align: justify; line-height: 1.5; }
 .flotantes { position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; }
 .btn-flotante {
-    width: 50px; height: 50px; border-radius: 50%; background-color: rgba(90, 60, 120, 0.4);
-    border: 2px solid var(--dorado-brillante); color: var(--dorado-brillante); font-size: 1.5em;
-    cursor: pointer; box-shadow: 0 4px 10px var(--sombra-color); transition: all 0.3s ease;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    
+    /* CAMBIO: Usamos el nuevo color índigo translúcido */
+    background-color: var(--indigo-translucido); 
+    
+    border: 2px solid var(--dorado-brillante);
+    color: var(--dorado-brillante);
+    font-size: 1.5em;
+    cursor: pointer;
+    box-shadow: 0 4px 10px var(--sombra-color);
+    transition: all 0.3s ease;
 }
 .btn-flotante:hover { transform: scale(1.1); }
-#tabla-guardados-container { max-height: 60vh; overflow-y: auto; }
-.tabla-bonita { width: 100%; border-collapse: collapse; margin-top: 20px; }
-.tabla-bonita th, .tabla-bonita td {
-    padding: 12px 8px; /* Reducimos un poco el padding lateral */
-    border: 1px solid var(--dorado-brillante);
-    text-align: left;
-    word-break: break-word; /* Evita que nombres largos rompan la tabla */
-}
-
-/* Y busca este otro bloque y reemplázalo */
-.tabla-bonita {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    table-layout: fixed; /* Esto es importante para respetar los anchos */
-}.tabla-bonita th { background-color: rgba(255, 215, 0, 0.2); color: var(--dorado-brillante); font-family: 'Cinzel', serif; }
-#notificacion {
-    position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-    background-color: var(--violeta-suave); color: var(--dorado-brillante); padding: 15px 30px;
-    border-radius: 10px; border: 1px solid var(--dorado-brillante); box-shadow: 0 5px 15px var(--sombra-color);
-    font-family: 'Cinzel', serif; font-size: 1.1em; z-index: 1000; opacity: 0; visibility: hidden;
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+#notificacion { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background-color: var(--violeta-suave); color: var(--dorado-brillante); padding: 15px 30px; border-radius: 10px; border: 1px solid var(--dorado-brillante); box-shadow: 0 5px 15px var(--sombra-color); font-family: 'Cinzel', serif; font-size: 1.1em; z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 #notificacion.mostrar { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
-.btn-arcano-link {
-    background: none; border: none; color: var(--dorado-brillante); text-decoration: underline;
-    cursor: pointer; font-family: inherit; font-size: inherit; padding: 0; text-align: left;
-}
+.btn-arcano-link { background: none; border: none; color: var(--dorado-brillante); text-decoration: underline; cursor: pointer; font-family: inherit; font-size: inherit; padding: 0; text-align: left; }
 .btn-arcano-link:hover { color: var(--blanco-puro); }
 #btn-calcular-anual-grande { margin-top: 25px; }
 #input-ano { text-align: center; font-size: 1.2em; font-family: 'Cinzel', serif; }
-/* -- ESTILO AÑADIDO PARA EL NUEVO BOTÓN -- */
-.btn-calcular-anual-guardado {
-    background-color: transparent; border: 1px solid var(--dorado-brillante); color: var(--dorado-brillante);
-    border-radius: 5px; padding: 5px 10px; cursor: pointer; transition: all 0.3s ease;
-}
-.btn-calcular-anual-guardado:hover { background-color: var(--dorado-brillante); color: var(--indigo-fondo); }
-.label-ayuda {
-    display: block;
-    text-align: left;
-    font-size: 0.8em;
-    color: var(--blanco-puro);
-    opacity: 0.7;
-    margin-bottom: 5px; /* Pequeño espacio sobre el campo de fecha */
-}
+.datepicker-picker { background-color: var(--indigo-fondo); border: 1px solid var(--dorado-brillante); border-radius: 15px; box-shadow: 0 10px 30px var(--sombra-color); }
+.datepicker-header .datepicker-title { font-size: 1.5rem !important; padding: 0.5rem 0 !important; line-height: 1; }
+.datepicker-header .datepicker-title, .datepicker-header .prev-btn, .datepicker-header .next-btn { color: var(--dorado-brillante); font-family: 'Cinzel', serif; }
+.datepicker-header .prev-btn:hover, .datepicker-header .next-btn:hover, .datepicker-header .datepicker-title:hover { background-color: var(--violeta-suave); }
+.datepicker-cell { color: var(--blanco-puro); border-radius: 50%; }
+.datepicker-cell:hover { background-color: var(--violeta-suave); }
+.datepicker-cell.focused { border: 1px solid var(--dorado-brillante); }
+.datepicker-cell.selected, .datepicker-cell.selected:hover, .datepicker-cell.selected.focused { background-color: var(--dorado-brillante) !important; color: var(--indigo-fondo) !important; font-weight: bold; border: none !important; border-radius: 50%; }
+.datepicker-cell.disabled, .datepicker-cell.prev, .datepicker-cell.next { color: var(--blanco-puro); opacity: 0.3; }
+.datepicker-days .dow { color: var(--dorado-brillante); opacity: 0.7; }
+.datepicker-footer { display: none; }
+#btn-arcano-implicito { margin-top: 15px; }
+.btn-eliminar { background-color: #9d2525; color: var(--blanco-puro); border: 1px solid #ff7b7b; border-radius: 50%; width: 28px; height: 28px; font-weight: bold; font-size: 1em; cursor: pointer; transition: all 0.3s ease; line-height: 24px; }
+.btn-eliminar:hover { background-color: #c53030; transform: scale(1.1); }
+#modal-confirmar-mensaje { margin-bottom: 2em; font-size: 1.1em; }
+.lista-guardados-container { max-height: 60vh; overflow-y: auto; width: 100%; margin-top: 1.5em; }
+.tarjeta-guardado { background-color: rgba(0, 0, 0, 0.2); border-radius: 10px; margin-bottom: 10px; padding: 10px; display: flex; align-items: center; border: 1px solid var(--dorado-brillante); transition: background-color 0.3s ease; }
+.tarjeta-guardado:hover { background-color: rgba(0, 0, 0, 0.4); }
+.tarjeta-miniatura { flex-shrink: 0; width: 50px; height: 75px; margin-right: 15px; border-radius: 5px; overflow: hidden; border: 1px solid var(--dorado-brillante); }
+.tarjeta-miniatura img { width: 100%; height: 100%; object-fit: cover; }
+.tarjeta-info { flex-grow: 1; display: flex; flex-direction: column; text-align: left; }
+.info-nombre { font-family: 'Cinzel', serif; font-size: 1.2em; font-weight: bold; color: var(--blanco-puro); }
+.info-fecha { font-size: 0.8em; opacity: 0.7; margin-bottom: 5px; }
+.tarjeta-accion { flex-shrink: 0; margin-left: 10px; }
+.celda-eliminar { text-align: center; vertical-align: middle; }
+.btn-extra { margin-top: 5px; }
+.btn-volver-info { position: absolute; bottom: 5vh; width: 80%; max-width: 350px; }
+#info-contenido { text-align: left; max-height: 75vh; overflow-y: auto; }
+#info-contenido h3 { font-family: 'Cinzel', serif; color: var(--dorado-brillante); margin-top: 1.5em; margin-bottom: 0.5em; border-bottom: 1px solid var(--dorado-brillante); padding-bottom: 5px; }
+#info-contenido p { font-family: 'Lato', sans-serif; line-height: 1.6; opacity: 0.9; margin-bottom: 1em; }
 
-.datepicker-picker {
-    background-color: var(--indigo-fondo);
-    border: 1px solid var(--dorado-brillante);
-    border-radius: 15px;
-    box-shadow: 0 10px 30px var(--sombra-color);
-}
-
-.datepicker-header .datepicker-title {
-    font-size: 1.5rem !important; /* Aumentamos significativamente el tamaño de la fuente */
-    padding: 0.5rem 0 !important; /* Ajustamos el padding para que no se vea apretado */
-    line-height: 1; /* Mejoramos el alineamiento vertical */
-}
-
-/* Encabezado (donde se cambia de mes/año) */
-.datepicker-header .datepicker-title,
-.datepicker-header .prev-btn, 
-.datepicker-header .next-btn {
-    color: var(--dorado-brillante);
+.btn-nombre-link {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
     font-family: 'Cinzel', serif;
-}
-.datepicker-header .prev-btn:hover, 
-.datepicker-header .next-btn:hover,
-.datepicker-header .datepicker-title:hover {
-    background-color: var(--violeta-suave);
-}
-
-/* Celdas de días, meses y años */
-.datepicker-cell {
-    color:  #a29c24fd;;
-    border-radius: 50%;
-}
-.datepicker-cell:hover {
-    background-color: var(--violeta-suave);
-}
-.datepicker-cell.focused {
-    border: 1px solid var(--dorado-brillante);
-}
-.datepicker-cell.selected, 
-.datepicker-cell.selected:hover,
-.datepicker-cell.selected.focused {
-    background-color: var(--dorado-brillante) !important; /* Fondo dorado brillante (FORZADO) */
-    color: var(--indigo-fondo) !important;              /* Texto índigo oscuro (FORZADO) */
+    font-size: 1.2em;
     font-weight: bold;
-    border: none !important;                           /* Quitamos cualquier borde conflictivo (FORZADO) */
-    border-radius: 50%;
-}
-.datepicker-cell.disabled, 
-.datepicker-cell.prev, 
-.datepicker-cell.next {
     color: var(--blanco-puro);
-    opacity: 0.3;
-}
-
-/* Nombres de los días de la semana (D, L, M...) */
-.datepicker-days .dow {
-    color: var(--dorado-brillante);
-    opacity: 0.7;
-}
-
-/* Ocultar el pie de página (botones today/clear) que no necesitamos */
-.datepicker-footer {
-    display: none;
-}
-/* Botón para el arcano implícito */
-#btn-arcano-implicito {
-    margin-top: 15px; /* Espacio entre este y el botón de arriba */
-}
-
-/* Botón de eliminar (X) en la tabla */
-.btn-eliminar {
-    background-color: #9d2525; /* Un rojo oscuro */
-    color: var(--blanco-puro);
-    border: 1px solid #ff7b7b; /* Borde rojo claro */
-    border-radius: 50%; /* Lo hacemos circular */
-    width: 28px;
-    height: 28px;
-    font-weight: bold;
-    font-size: 1em;
     cursor: pointer;
-    transition: all 0.3s ease;
-    line-height: 24px; /* Centra la X verticalmente */
+    text-align: left;
+    transition: color 0.3s ease;
 }
 
-.btn-eliminar:hover {
-    background-color: #c53030;
-    transform: scale(1.1);
-}
-
-/* Párrafo del mensaje de confirmación */
-#modal-confirmar-mensaje {
-    margin-bottom: 2em;
-    font-size: 1.1em;
-}
-.celda-eliminar {
-    text-align: center;      /* Centra horizontalmente */
-    vertical-align: middle;  /* Centra verticalmente */
+.btn-nombre-link:hover {
+    color: var(--dorado-brillante);
 }

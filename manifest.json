@@ -1,6 +1,6 @@
 {
-    "name": "Arcano Personal",
-    "short_name": "Tu Arcano",
+    "name": "Tu Arcana Personal",
+    "short_name": "Tu Arcana",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#191028",
