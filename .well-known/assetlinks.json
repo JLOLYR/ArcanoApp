@@ -1,0 +1,9 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.tuarcana.app",
+      "sha256_cert_fingerprints":
+      ["FA:F0:9D:A9:D9:A0:03:76:1A:24:0E:D1:C6:13:7F:26:FC:ED:95:4A:9F:39:C6:58:AB:B6:92:F9:DA:FF:59:B0"]
+    }
+}]
