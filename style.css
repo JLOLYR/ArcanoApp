@@ -73,7 +73,7 @@ input[type="text"], input[type="date"], input[type="number"] { width: 100%; padd
 .datepicker-header .datepicker-title { font-size: 1.5rem !important; padding: 0.5rem 0 !important; line-height: 1; }
 .datepicker-header .datepicker-title, .datepicker-header .prev-btn, .datepicker-header .next-btn { color: var(--dorado-brillante); font-family: 'Cinzel', serif; }
 .datepicker-header .prev-btn:hover, .datepicker-header .next-btn:hover, .datepicker-header .datepicker-title:hover { background-color: var(--violeta-suave); }
-.datepicker-cell { color: var(--blanco-puro); border-radius: 50%; }
+.datepicker-cell { color: #6350a2; border-radius: 50%; }
 .datepicker-cell:hover { background-color: var(--violeta-suave); }
 .datepicker-cell.focused { border: 1px solid var(--dorado-brillante); }
 .datepicker-cell.selected, .datepicker-cell.selected:hover, .datepicker-cell.selected.focused { background-color: var(--dorado-brillante) !important; color: var(--indigo-fondo) !important; font-weight: bold; border: none !important; border-radius: 50%; }
